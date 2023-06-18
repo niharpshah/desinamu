@@ -1,6 +1,6 @@
-# desinamu
+# Desi Namu
 
-A new Flutter project.
+A new Flutter project. An Account managment Application
 
 ## Getting Started
 
