@@ -1,4 +1,4 @@
-# DesiNamu
+# desinamu
 
 A new Flutter project.
 
