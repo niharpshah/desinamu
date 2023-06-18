@@ -1,4 +1,4 @@
-# expenses
+# DesiNamu
 
 A new Flutter project.
 
