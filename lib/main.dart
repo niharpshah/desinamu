@@ -20,14 +20,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: HomePage(),
+      // Change home page to HomePage()
+      home: IncomePage(),
       routes: <String, WidgetBuilder>{
-        "/a": (BuildContext conxt) => IncomePage(),
-        "/b": (BuildContext conxt) => ExpensePage(),
-        "/c": (BuildContext conxt) => BalancePage(),
-        "/d": (BuildContext conxt) => GoalsPage(),
-        "/e": (BuildContext conxt) => TransactionPage(),
-        "/f": (BuildContext conxt) => ReportPage(),
+        "/a": (BuildContext context) => IncomePage(),
+        "/b": (BuildContext context) => ExpensePage(),
+        "/c": (BuildContext context) => BalancePage(),
+        "/d": (BuildContext context) => GoalsPage(),
+        "/e": (BuildContext context) => TransactionPage(),
+        "/f": (BuildContext context) => ReportPage(),
       },
     );
   }

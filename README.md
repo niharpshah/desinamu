@@ -1,6 +1,7 @@
 # Desi Namu
 
-A new Flutter project. An Account managment Application
+A new Flutter project. An Account managment Application.
+You can see day to day transaction with management system.
 
 ## Getting Started
 
