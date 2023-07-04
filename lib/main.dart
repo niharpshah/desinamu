@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'expensepage.dart';
 import 'homepage.dart';
 import 'incomepage.dart';
+import 'screens/showincome.dart';
 
 void main() => runApp(MyApp());
 

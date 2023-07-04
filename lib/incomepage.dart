@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'screens/showincome.dart';
 
 class IncomePage extends StatefulWidget {
   const IncomePage({super.key});
@@ -9,88 +9,47 @@ class IncomePage extends StatefulWidget {
 }
 
 class _IncomePageState extends State<IncomePage> {
-  final GlobalKey<FormState> _informKey = GlobalKey<FormState>();
-  late String _type, taxmount = "", finalAmount = "";
-  late String _amount = "";
+  final GlobalKey<FormState> _key = new GlobalKey();
+  late String type,
+      taxmount = "",
+      finalAmount = "",
+      amount = "",
+      kiwisaver = "";
   late bool _autovalid = false;
-
-  addIncomeData() {
-    if (_informKey.currentState!.validate()) {
-      // Save Data in Global Key
-      _informKey.currentState?.save();
-      // Send to Next Screen
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AlertDialog(
-            content: Text(
-              _amount,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),
-            ),
-            title: Text(
-              _type,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  showincomeafterTax();
-                },
-                child: Text('Ok Got It..!!'),
-              ),
-            ],
-          ),
-        ),
-      ).then((_) => _informKey.currentState?.reset());
-    } else {
-      setState(() {
-        _autovalid = true;
-        // showError("errorMessage");
-      });
-    }
-  }
 
   // Show income after tax
   showincomeafterTax() {
-    if (_amount!.isNotEmpty) {
-      int amountDouble = int.parse(_amount);
-      taxmount = (amountDouble - (amountDouble * 17 / 100)).toString();
-      // finalAmount = (amountDouble - taxmount).toString();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AlertDialog(
-            title: Text('Tax on Income'),
-            content: Text(
-              taxmount,
-              style: TextStyle(
-                color: Colors.red,
-              ),
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          ),
-        ),
-      );
+    if (type!.isNotEmpty && type == "z" || type == "Z") {
+      if (amount!.isNotEmpty) {
+        double amountDouble = double.parse(amount);
+        amount = amountDouble.toStringAsFixed(2);
+        taxmount = (amountDouble * 17 / 100).toStringAsFixed(2).toString();
+        finalAmount = (amountDouble -
+                (amountDouble * 17 / 100) -
+                (amountDouble * 3 / 100))
+            .toStringAsFixed(2)
+            .toString();
+        kiwisaver = (amountDouble * 3 / 100).toStringAsFixed(2).toString();
+      } else {
+        setState(() {
+          _autovalid = true;
+        });
+      }
     } else {
-      setState(() {
-        _autovalid = true;
-      });
+      if (amount!.isNotEmpty) {
+        double amountDouble = double.parse(amount);
+        amount = amountDouble.toStringAsFixed(2);
+        taxmount = (amountDouble * 0 / 100).toStringAsFixed(2).toString();
+        finalAmount =
+            (amountDouble - (amountDouble * 0 / 100) - (amountDouble * 0 / 100))
+                .toStringAsFixed(2)
+                .toString();
+        kiwisaver = (amountDouble * 0 / 100).toStringAsFixed(2).toString();
+      } else {
+        setState(() {
+          _autovalid = true;
+        });
+      }
     }
   }
 
@@ -106,7 +65,7 @@ class _IncomePageState extends State<IncomePage> {
         child: Column(
           children: <Widget>[
             Form(
-              key: _informKey,
+              key: _key,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
@@ -141,7 +100,7 @@ class _IncomePageState extends State<IncomePage> {
                           }
                         },
                         decoration: InputDecoration(labelText: 'Type of work'),
-                        onSaved: (input) => _type = input!,
+                        onSaved: (input) => type = input!,
                       ),
                     ),
                     ListTile(
@@ -154,7 +113,7 @@ class _IncomePageState extends State<IncomePage> {
                           }
                         },
                         decoration: InputDecoration(labelText: 'Amount'),
-                        onSaved: (input) => _amount = input!,
+                        onSaved: (input) => amount = input!,
                       ),
                     ),
                     Container(
@@ -168,7 +127,10 @@ class _IncomePageState extends State<IncomePage> {
                           padding:
                               EdgeInsets.fromLTRB(100.0, 10.0, 100.0, 10.0),
                         ),
-                        onPressed: addIncomeData,
+                        onPressed: () {
+                          _SendNextScreen();
+                          showincomeafterTax();
+                        },
                         child: Text(
                           'Add Income',
                           style: TextStyle(
@@ -184,39 +146,33 @@ class _IncomePageState extends State<IncomePage> {
                 ),
               ),
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(10.0),
-                  ),
-                  Container(
-                    child: Text(
-                      'Income after Tax',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          leading: Icon(Icons.monetization_on_outlined),
-                          title: Text(taxmount),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
     );
+  }
+
+  _SendNextScreen() {
+    if (_key.currentState!.validate()) {
+      // Save Data in Global Key
+      _key.currentState?.save();
+      // Send to next screen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ShowIncomePage(
+            type: type,
+            taxmount: taxmount,
+            finalAmount: finalAmount,
+            amount: amount,
+            kiwi: kiwisaver,
+          ),
+        ),
+      ).then((_) => _key.currentState?.reset());
+    } else {
+      setState(() {
+        _autovalid = true;
+      });
+    }
   }
 }
